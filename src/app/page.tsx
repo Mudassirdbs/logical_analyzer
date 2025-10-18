@@ -20,16 +20,19 @@ export default function Home() {
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showReference, setShowReference] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleAnalyze = async () => {
     if (!inputText.trim()) return;
-
+    
     setIsAnalyzing(true);
+    setError(null);
     try {
       const analysis = await analyzeLogic(inputText);
       setResult(analysis);
     } catch (error) {
       console.error("Analysis error:", error);
+      setError(error instanceof Error ? error.message : "Errore durante l'analisi");
     } finally {
       setIsAnalyzing(false);
     }
@@ -69,10 +72,22 @@ export default function Home() {
               <textarea
                 id="sentence-input"
                 value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
+                onChange={(e) => {
+                  setInputText(e.target.value);
+                  if (error) setError(null);
+                }}
                 placeholder="Inserisci la tua frase qui..."
+                maxLength={500}
                 className="w-full h-24 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white resize-none"
               />
+              <div className="flex justify-between items-center mt-1">
+                <span className="text-xs text-gray-500 dark:text-gray-400">
+                  Limite: 500 caratteri
+                </span>
+                <span className={`text-xs ${inputText.length > 450 ? 'text-red-500' : 'text-gray-500 dark:text-gray-400'}`}>
+                  {inputText.length}/500
+                </span>
+              </div>
             </div>
 
             <button
@@ -94,6 +109,20 @@ export default function Home() {
             </button>
           </div>
 
+          {/* Error Display */}
+          {error && (
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
+              <div className="flex items-center">
+                <svg className="w-5 h-5 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+                <p className="text-red-800 dark:text-red-200 text-sm">
+                  <strong>Errore:</strong> {error}
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Example Sentences */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Frasi di Esempio</h3>
@@ -101,7 +130,10 @@ export default function Home() {
               {exampleSentences.map((sentence, index) => (
                 <button
                   key={index}
-                  onClick={() => setInputText(sentence)}
+                  onClick={() => {
+                    setInputText(sentence);
+                    if (error) setError(null);
+                  }}
                   className="px-3 py-1 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-full text-sm transition-colors duration-200"
                 >
                   {sentence}

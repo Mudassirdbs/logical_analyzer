@@ -33,7 +33,8 @@ export async function analyzeLogic(text: string): Promise<AnalysisResult> {
     });
 
     if (!response.ok) {
-      throw new Error(`API request failed: ${response.status}`);
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || `API request failed: ${response.status}`);
     }
 
     const analysis = await response.json();

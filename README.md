@@ -88,10 +88,12 @@ L'app funzionerà senza la chiave API utilizzando solo le librerie NLP, ma il po
 
 ## Utilizzo
 
-1. Inserisci una frase italiana nell'area di testo
+1. Inserisci una frase italiana nell'area di testo (massimo 500 caratteri)
 2. Clicca "Analizza Frase" per elaborare il testo
 3. Visualizza i risultati che mostrano soggetti, predicati, complementi, tipo di frase e affidabilità identificati
 4. Usa il pulsante "Mostra Riferimento Complementi" per esplorare tutti i tipi di complementi
+
+**Nota**: C'è un limite di 500 caratteri per l'input per garantire prestazioni ottimali dell'AI.
 
 ## Frasi di Esempio
 

@@ -16,6 +16,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (text.length > 500) {
+      return NextResponse.json(
+        { error: 'Text too long. Maximum 500 characters allowed.' },
+        { status: 400 }
+      );
+    }
+
     if (!process.env.GEMINI_API_KEY) {
       return NextResponse.json(
         { error: 'Gemini API key not configured' },
