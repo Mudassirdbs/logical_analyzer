@@ -1,127 +1,134 @@
-# Logic Analysis App
+# App Analisi Logica
 
-A modern web application for performing logical analysis of English sentences using advanced NLP libraries and AI. This tool automatically identifies subjects, predicates, and various grammatical complements to help users understand sentence structure.
+Un'applicazione web moderna per eseguire l'analisi logica delle frasi italiane utilizzando librerie NLP avanzate e AI. Questo strumento identifica automaticamente soggetti, predicati e vari complementi grammaticali per aiutare gli utenti a comprendere la struttura delle frasi.
 
-## Features
+## Caratteristiche
 
-- **AI-Powered Analysis**: Uses Google Gemini AI for enhanced accuracy and context understanding
-- **NLP Library Integration**: Built with compromise.js for robust English grammar parsing
-- **Comprehensive Results**: Identifies subjects, predicates, complements, sentence types, and confidence scores
-- **Educational Reference**: Complete complement reference with examples and explanations
-- **Modern UI**: Clean, responsive design with dark mode support
-- **Example Sentences**: Pre-loaded English examples to help users get started
+- **Analisi Potenziata da AI**: Utilizza Google Gemini AI per una maggiore accuratezza e comprensione del contesto
+- **Integrazione Librerie NLP**: Costruita con librerie NLP robuste per l'analisi grammaticale italiana
+- **Risultati Completi**: Identifica soggetti, predicati, complementi, tipi di frase e punteggi di affidabilità
+- **Riferimento Educativo**: Riferimento completo dei complementi con esempi e spiegazioni
+- **UI Moderna**: Design pulito e reattivo con supporto per la modalità scura
+- **Frasi di Esempio**: Esempi italiani pre-caricati per aiutare gli utenti a iniziare
 
-## How It Works
+## Come Funziona
 
-Logical analysis consists of finding:
-1. **Subject** - The person, animal, or thing performing the action
-2. **Predicate** - The action or state expressed by the verb
-3. **Complements** - Additional elements that complete the meaning of the sentence
-4. **Sentence Type** - Simple, compound, or complex sentence classification
-5. **Confidence Score** - AI confidence level for the analysis
+L'analisi logica consiste nel trovare:
+1. **Soggetto** - La persona, animale o cosa che compie o subisce l'azione
+2. **Predicato** - L'azione o stato espresso dal verbo
+3. **Complementi** - Elementi aggiuntivi che completano il significato della frase
+4. **Tipo di Frase** - Classificazione di frase semplice, composta o complessa
+5. **Punteggio di Affidabilità** - Livello di fiducia dell'AI per l'analisi
 
-## Technology Stack
+## Stack Tecnologico
 
-- **Frontend**: Next.js 15 with React 19
-- **Backend**: Next.js API Routes for server-side processing
+- **Frontend**: Next.js 15 con React 19
+- **Backend**: Next.js API Routes per l'elaborazione lato server
 - **Styling**: Tailwind CSS v4
-- **Language**: TypeScript
-- **AI Engine**: Google Gemini API (server-side only)
-- **Package Manager**: Bun for fast dependency management
-- **Architecture**: Client-server separation for API key security
+- **Linguaggio**: TypeScript
+- **Motore AI**: Google Gemini API (solo lato server)
+- **Gestore Pacchetti**: Bun per una gestione rapida delle dipendenze
+- **Architettura**: Separazione client-server per la sicurezza delle chiavi API
 
-## Supported Complements
+## Complementi Supportati
 
-The app recognizes various types of English complements including:
-- Direct Object
-- Indirect Object  
-- Subject Complement
-- Object Complement
-- Prepositional Phrase
-- Adverbial Phrase
-- Adjectival Phrase
-- Appositive
-- Participle Phrase
-- Gerund Phrase
-- Infinitive Phrase
-- Absolute Phrase
-- Noun Clause
-- Adjective Clause
-- Adverb Clause
+L'app riconosce vari tipi di complementi italiani tra cui:
+- Complemento Oggetto
+- Complemento Predicativo del Soggetto
+- Complemento d'Agente
+- Complemento di Specificazione
+- Complemento di Termine
+- Complemento di Luogo
+- Complemento di Tempo
+- Complemento di Causa
+- Complemento di Fine o Scopo
+- Complemento di Mezzo o Strumento
+- Complemento di Modo o Maniera
+- Complemento di Compagnia
+- Complemento di Materia
+- Complemento di Qualità
+- Complemento di Età
+- Complemento di Prezzo
+- Complemento di Vantaggio
+- Complemento di Svantaggio
+- Complemento di Sostituzione
+- Complemento di Esclusione
+- Complemento Concessivo
+- Complemento Vocativo
 
-## Getting Started
+## Iniziare
 
-1. **Install Dependencies**:
+1. **Installa le Dipendenze**:
    ```bash
    bun install
    ```
 
-2. **Set up Environment Variables**:
+2. **Configura le Variabili d'Ambiente**:
    ```bash
    cp env.example .env.local
-   # Edit .env.local and add your Google Gemini API key
+   # Modifica .env.local e aggiungi la tua chiave API Google Gemini
    ```
 
-3. **Run Development Server**:
+3. **Avvia il Server di Sviluppo**:
 ```bash
    bun run dev
    ```
 
-4. **Open in Browser**:
-   Navigate to [http://localhost:3000](http://localhost:3000)
+4. **Apri nel Browser**:
+   Naviga su [http://localhost:3000](http://localhost:3000)
 
-## API Setup
+## Configurazione API
 
 ### Google Gemini API
-1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Create a new API key
-3. Add it to your `.env.local` file as `GEMINI_API_KEY`
+1. Visita [Google AI Studio](https://makersuite.google.com/app/apikey)
+2. Crea una nuova chiave API
+3. Aggiungila al tuo file `.env.local` come `GEMINI_API_KEY`
 
-The app will work without the API key using only the NLP library, but AI enhancement provides better accuracy.
+L'app funzionerà senza la chiave API utilizzando solo le librerie NLP, ma il potenziamento AI fornisce una maggiore accuratezza.
 
-## Usage
+## Utilizzo
 
-1. Enter an English sentence in the text area
-2. Click "Analyze Sentence" to process the text
-3. View the results showing identified subjects, predicates, complements, sentence type, and confidence
-4. Use the "Show Complement Reference" button to explore all complement types
+1. Inserisci una frase italiana nell'area di testo
+2. Clicca "Analizza Frase" per elaborare il testo
+3. Visualizza i risultati che mostrano soggetti, predicati, complementi, tipo di frase e affidabilità identificati
+4. Usa il pulsante "Mostra Riferimento Complementi" per esplorare tutti i tipi di complementi
 
-## Example Sentences
+## Frasi di Esempio
 
-Try these example sentences:
-- "The student reads books in the library"
-- "She gave him a beautiful gift yesterday"
-- "The teacher is explaining the lesson clearly"
-- "They built a house on the hill"
-- "I found the book very interesting"
+Prova queste frasi di esempio:
+- "Il bambino gioca nel parco"
+- "Maria legge un libro interessante"
+- "Gli studenti studiano per l'esame"
+- "Il gatto dorme sul divano"
+- "Noi mangiamo la pizza insieme"
 
-## Development
+## Sviluppo
 
-The application uses a secure client-server architecture:
+L'applicazione utilizza un'architettura client-server sicura:
 
-1. **Frontend**: React components that send text to the API endpoint
-2. **Backend**: Next.js API route that handles Gemini AI calls securely
-3. **Security**: API key is never exposed to the client-side
-4. **Error Handling**: Graceful fallback responses when AI services are unavailable
+1. **Frontend**: Componenti React che inviano testo all'endpoint API
+2. **Backend**: Route API Next.js che gestiscono le chiamate Gemini AI in modo sicuro
+3. **Sicurezza**: La chiave API non viene mai esposta al client-side
+4. **Gestione Errori**: Risposte di fallback eleganti quando i servizi AI non sono disponibili
 
-### Architecture
+### Architettura
 
-- **Client-side**: React components with TypeScript, no API keys exposed
-- **Server-side**: Next.js API routes handle all AI processing
-- **Security**: Gemini API key stored securely in environment variables
-- **Error Handling**: Comprehensive error handling with fallback responses
-- **Performance**: Optimized API calls with proper HTTP status codes
+- **Client-side**: Componenti React con TypeScript, nessuna chiave API esposta
+- **Server-side**: Route API Next.js gestiscono tutto l'elaborazione AI
+- **Sicurezza**: Chiave API Gemini memorizzata in modo sicuro nelle variabili d'ambiente
+- **Gestione Errori**: Gestione errori completa con risposte di fallback
+- **Prestazioni**: Chiamate API ottimizzate con codici di stato HTTP appropriati
 
-## Contributing
+## Contribuire
 
-This is a learning project demonstrating modern NLP and AI integration. Feel free to fork and enhance:
+Questo è un progetto di apprendimento che dimostra l'integrazione moderna di NLP e AI. Sentiti libero di fare fork e migliorare:
 
-- Add more complement types
-- Improve the analysis algorithms
-- Integrate additional AI models
-- Add more languages
-- Enhance the UI/UX
+- Aggiungi più tipi di complementi
+- Migliora gli algoritmi di analisi
+- Integra modelli AI aggiuntivi
+- Aggiungi più lingue
+- Migliora l'UI/UX
 
-## License
+## Licenza
 
-This project is open source and available under the MIT License.
+Questo progetto è open source e disponibile sotto la Licenza MIT.

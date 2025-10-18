@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Logic Analysis - AI-Powered English Grammar Analysis",
-  description: "Free and fast online logical analysis of English sentences using advanced NLP and AI. Identify subjects, predicates, and complements automatically.",
+  title: "Analisi Logica - Analisi Grammaticale Italiana con AI",
+  description: "Analisi logica gratuita e veloce online delle frasi italiane utilizzando AI avanzata. Identifica soggetti, predicati e complementi automaticamente.",
 };
 
 export default function RootLayout({

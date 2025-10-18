@@ -1,119 +1,189 @@
-// English Grammar Complement Reference
-// Comprehensive information about English grammatical complements
+// Riferimento Complementi Grammaticali Italiani
+// Informazioni complete sui complementi grammaticali italiani
 
 export interface ComplementInfo {
   name: string;
-  type: 'direct' | 'indirect' | 'phrasal';
+  type: 'diretto' | 'indiretto';
+  group?: number;
   definition: string;
   examples: string[];
-  patterns: string[];
+  prepositions: string[];
 }
 
 export const complementReference: ComplementInfo[] = [
   {
-    name: 'Direct Object',
-    type: 'direct',
-    definition: 'The noun or pronoun that receives the action of the verb directly',
-    examples: ['She reads books', 'He kicked the ball', 'They built a house'],
-    patterns: ['Subject + Verb + Direct Object']
+    name: 'Complemento Oggetto',
+    type: 'diretto',
+    definition: 'indica la persona, animale o cosa su cui ricade direttamente l\'azione compiuta dal soggetto ed espressa da un verbo transitivo in forma attiva o riflessiva.',
+    examples: ['Il bambino mangia la mela', 'Maria legge un libro'],
+    prepositions: []
   },
   {
-    name: 'Indirect Object',
-    type: 'indirect',
-    definition: 'The noun or pronoun that receives the direct object or benefits from the action',
-    examples: ['She gave him a book', 'I told her the truth', 'We sent them a letter'],
-    patterns: ['Subject + Verb + Indirect Object + Direct Object']
+    name: 'Complemento Predicativo del Soggetto',
+    type: 'diretto',
+    definition: 'È costituito da un sostantivo o da un aggettivo che completa il significato del predicato con un verbo intransitivo o transitivo passivo.',
+    examples: ['Il cielo è azzurro', 'Maria sembra felice'],
+    prepositions: []
   },
   {
-    name: 'Subject Complement',
-    type: 'direct',
-    definition: 'A word or phrase that follows a linking verb and describes or renames the subject',
-    examples: ['She is a teacher', 'The sky looks blue', 'He became famous'],
-    patterns: ['Subject + Linking Verb + Subject Complement']
+    name: 'Complemento d\'Agente',
+    type: 'indiretto',
+    group: 1,
+    definition: 'indica la persona o l\'animale da cui è compiuta l\'azione espressa dal verbo passivo.',
+    examples: ['Il libro è stato scritto da Marco', 'La casa è stata costruita dagli operai'],
+    prepositions: ['da', 'dal', 'dalla', 'dai', 'dagli', 'dalle']
   },
   {
-    name: 'Object Complement',
-    type: 'direct',
-    definition: 'A word or phrase that follows and modifies the direct object',
-    examples: ['They elected him president', 'We painted the house red', 'I found the book interesting'],
-    patterns: ['Subject + Verb + Direct Object + Object Complement']
+    name: 'Complemento di Specificazione',
+    type: 'indiretto',
+    group: 1,
+    definition: 'specifica il significato del termine a cui si riferisce, che altrimenti rimarrebbe generico.',
+    examples: ['Il libro di storia', 'La casa di Maria', 'Il colore del cielo'],
+    prepositions: ['di', 'del', 'dello', 'della', 'dei', 'degli', 'delle']
   },
   {
-    name: 'Prepositional Phrase',
-    type: 'phrasal',
-    definition: 'A phrase that begins with a preposition and ends with a noun or pronoun',
-    examples: ['The book is on the table', 'She walked through the park', 'He lives in New York'],
-    patterns: ['Preposition + Object of Preposition']
+    name: 'Complemento di Termine',
+    type: 'indiretto',
+    group: 1,
+    definition: 'indica la persona, animale o cosa su cui finisce l\'azione compiuta dal soggetto espressa dal predicato.',
+    examples: ['Parlo a Marco', 'Scrivo alla madre', 'Telefono agli amici'],
+    prepositions: ['a', 'al', 'allo', 'alla', 'ai', 'agli', 'alle']
   },
   {
-    name: 'Adverbial Phrase',
-    type: 'phrasal',
-    definition: 'A phrase that modifies a verb, adjective, or adverb',
-    examples: ['She runs very quickly', 'He is quite tall', 'They arrived yesterday'],
-    patterns: ['Adverb + Adjective/Adverb', 'Time/Location expressions']
+    name: 'Complemento di Luogo',
+    type: 'indiretto',
+    group: 2,
+    definition: 'indica dove avviene l\'azione, dove si trova qualcuno o qualcosa, o dove si verifica una certa situazione.',
+    examples: ['Vivo a Roma', 'Sono in casa', 'Cammino per strada'],
+    prepositions: ['in', 'a', 'su', 'sopra', 'sotto', 'davanti', 'dietro', 'vicino', 'lontano', 'dentro', 'fuori']
   },
   {
-    name: 'Adjectival Phrase',
-    type: 'phrasal',
-    definition: 'A phrase that modifies a noun or pronoun',
-    examples: ['The book on the shelf', 'A man of great wisdom', 'The house with the red door'],
-    patterns: ['Prepositional phrase modifying noun']
+    name: 'Complemento di Tempo',
+    type: 'indiretto',
+    group: 2,
+    definition: 'indica il momento o il periodo di tempo in cui avviene l\'azione espressa dal predicato.',
+    examples: ['Arrivo domani', 'Studio di sera', 'Parto alle otto'],
+    prepositions: ['a', 'di', 'in', 'per', 'durante', 'prima', 'dopo']
   },
   {
-    name: 'Appositive',
-    type: 'direct',
-    definition: 'A noun or noun phrase that renames or explains another noun',
-    examples: ['My brother, John, is coming', 'Paris, the capital of France', 'The teacher, Mrs. Smith'],
-    patterns: ['Noun + Comma + Appositive + Comma']
+    name: 'Complemento di Causa',
+    type: 'indiretto',
+    group: 3,
+    definition: 'indica il motivo, la causa per cui qualcosa viene fatto o accade.',
+    examples: ['Piango per la gioia', 'Non esco per il freddo', 'È successo per errore'],
+    prepositions: ['per', 'a causa di', 'per colpa di']
   },
   {
-    name: 'Participle Phrase',
-    type: 'phrasal',
-    definition: 'A phrase that begins with a participle and modifies a noun',
-    examples: ['The running water', 'The broken window', 'The excited children'],
-    patterns: ['Present/Past Participle + Modifiers']
+    name: 'Complemento di Fine o Scopo',
+    type: 'indiretto',
+    group: 3,
+    definition: 'indica verso quale fine è diretta l\'azione espressa dal predicato.',
+    examples: ['Studio per imparare', 'Lavoro per guadagnare', 'Esco per divertirmi'],
+    prepositions: ['per', 'al fine di', 'allo scopo di']
   },
   {
-    name: 'Gerund Phrase',
-    type: 'phrasal',
-    definition: 'A phrase that begins with a gerund and functions as a noun',
-    examples: ['Swimming is good exercise', 'I enjoy reading books', 'His favorite activity is hiking'],
-    patterns: ['Gerund + Modifiers/Objects']
+    name: 'Complemento di Mezzo o Strumento',
+    type: 'indiretto',
+    group: 3,
+    definition: 'indica il mezzo (persona o animale) o lo strumento (oggetto o entità astratta) di cui ci si serve per compiere l\'azione.',
+    examples: ['Scrivo con la penna', 'Viaggio in treno', 'Comunico per telefono'],
+    prepositions: ['con', 'per mezzo di', 'tramite']
   },
   {
-    name: 'Infinitive Phrase',
-    type: 'phrasal',
-    definition: 'A phrase that begins with an infinitive and can function as a noun, adjective, or adverb',
-    examples: ['To learn is important', 'I want to travel', 'The book to read is on the shelf'],
-    patterns: ['To + Verb + Modifiers/Objects']
+    name: 'Complemento di Modo o Maniera',
+    type: 'indiretto',
+    group: 3,
+    definition: 'indica il modo in cui si svolge l\'azione espressa dal predicato.',
+    examples: ['Cammino lentamente', 'Parlo chiaramente', 'Lavoro con impegno'],
+    prepositions: ['con', 'in modo', 'in maniera']
   },
   {
-    name: 'Absolute Phrase',
-    type: 'phrasal',
-    definition: 'A phrase that modifies the entire sentence rather than a specific word',
-    examples: ['The weather being nice, we went for a walk', 'His work finished, he went home'],
-    patterns: ['Noun + Participle + Modifiers']
+    name: 'Complemento di Compagnia',
+    type: 'indiretto',
+    group: 4,
+    definition: 'indica la persona o l\'animale con cui qualcuno si trova in una certa situazione o compie o subisce l\'azione.',
+    examples: ['Vado con gli amici', 'Pranzo con la famiglia', 'Studio con Maria'],
+    prepositions: ['con', 'insieme a']
   },
   {
-    name: 'Noun Clause',
-    type: 'phrasal',
-    definition: 'A clause that functions as a noun in the sentence',
-    examples: ['What he said is true', 'I believe that you are right', 'Who she is remains a mystery'],
-    patterns: ['That/What/Who/Where/When/Why + Subject + Verb']
+    name: 'Complemento di Materia',
+    type: 'indiretto',
+    group: 4,
+    definition: 'indica il materiale di cui è fatto un oggetto.',
+    examples: ['Una statua di marmo', 'Un tavolo di legno', 'Una collana d\'oro'],
+    prepositions: ['di', 'in']
   },
   {
-    name: 'Adjective Clause',
-    type: 'phrasal',
-    definition: 'A clause that modifies a noun or pronoun',
-    examples: ['The book that I read', 'The man who came yesterday', 'The place where we met'],
-    patterns: ['Relative Pronoun + Subject + Verb']
+    name: 'Complemento di Qualità',
+    type: 'indiretto',
+    group: 5,
+    definition: 'indica una qualità o caratteristica di qualcuno o qualcosa.',
+    examples: ['Un uomo di coraggio', 'Una donna di intelligenza', 'Un bambino di bontà'],
+    prepositions: ['di', 'di grande', 'di poco']
   },
   {
-    name: 'Adverb Clause',
-    type: 'phrasal',
-    definition: 'A clause that modifies a verb, adjective, or adverb',
-    examples: ['She left when it started raining', 'He works hard so that he can succeed'],
-    patterns: ['Subordinating Conjunction + Subject + Verb']
+    name: 'Complemento di Età',
+    type: 'indiretto',
+    group: 5,
+    definition: 'specifica l\'età di qualcuno o qualcosa.',
+    examples: ['Un bambino di cinque anni', 'Una donna di trent\'anni', 'Un albero di cento anni'],
+    prepositions: ['di', 'dell\'età di']
+  },
+  {
+    name: 'Complemento di Prezzo',
+    type: 'indiretto',
+    group: 5,
+    definition: 'indica il costo di qualcosa o qualcuno.',
+    examples: ['Ho comprato un libro di venti euro', 'Una casa di centomila euro'],
+    prepositions: ['di', 'a', 'per']
+  },
+  {
+    name: 'Complemento di Vantaggio',
+    type: 'indiretto',
+    group: 5,
+    definition: 'indica la persona o la cosa per cui si compie l\'azione.',
+    examples: ['Lavoro per la famiglia', 'Studio per il futuro', 'Faccio questo per te'],
+    prepositions: ['per', 'a favore di', 'a beneficio di']
+  },
+  {
+    name: 'Complemento di Svantaggio',
+    type: 'indiretto',
+    group: 5,
+    definition: 'indica la persona o la cosa a danno della quale si compie l\'azione.',
+    examples: ['È successo contro di me', 'Lavoro a danno della salute'],
+    prepositions: ['contro', 'a danno di', 'a scapito di']
+  },
+  {
+    name: 'Complemento di Sostituzione',
+    type: 'indiretto',
+    group: 6,
+    definition: 'indica qualcuno o qualcosa che viene sostituito o scambiato con un altro.',
+    examples: ['Sostituisco il vecchio con il nuovo', 'Cambio il dollaro con l\'euro'],
+    prepositions: ['con', 'in cambio di', 'al posto di']
+  },
+  {
+    name: 'Complemento di Esclusione',
+    type: 'indiretto',
+    group: 6,
+    definition: 'indica chi o cosa rimane escluso rispetto a quanto espresso dal predicato.',
+    examples: ['Tutti tranne lui', 'Nessuno eccetto Maria', 'Tutto senza eccezioni'],
+    prepositions: ['tranne', 'eccetto', 'salvo', 'fuorché', 'senza']
+  },
+  {
+    name: 'Complemento Concessivo',
+    type: 'indiretto',
+    group: 6,
+    definition: 'indica nonostante cosa o chi si realizza l\'azione.',
+    examples: ['Vado nonostante la pioggia', 'Studio malgrado la stanchezza'],
+    prepositions: ['nonostante', 'malgrado', 'benché', 'sebbene']
+  },
+  {
+    name: 'Complemento Vocativo',
+    type: 'indiretto',
+    group: 6,
+    definition: 'indica la persona o l\'essere animato di cui si vuole richiamare l\'attenzione o che si vuole pregare, onorare, esaltare.',
+    examples: ['Marco, vieni qui!', 'Signora, scusi!', 'Dio, aiutaci!'],
+    prepositions: []
   }
 ];
 
@@ -128,6 +198,6 @@ export function getAllComplements(): ComplementInfo[] {
   return complementReference;
 }
 
-export function getComplementsByType(type: 'direct' | 'indirect' | 'phrasal'): ComplementInfo[] {
+export function getComplementsByType(type: 'diretto' | 'indiretto'): ComplementInfo[] {
   return complementReference.filter(comp => comp.type === type);
 }

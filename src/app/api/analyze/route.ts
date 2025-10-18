@@ -26,49 +26,59 @@ export async function POST(request: NextRequest) {
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
     
     const prompt = `
-    Perform a detailed logical analysis of this English sentence: "${text}"
+    Esegui un'analisi logica dettagliata di questa frase italiana: "${text}"
     
-    Analyze each word/phrase and provide a JSON response with this exact structure:
+    Analizza ogni parola/frase e fornisci una risposta JSON con questa struttura esatta:
     {
       "sentence": "${text}",
       "wordAnalysis": [
         {
-          "word": "specific word or phrase",
-          "type": "GRAMMATICAL FUNCTION",
-          "definition": "detailed definition explaining the grammatical function"
+          "word": "parola o frase specifica",
+          "type": "FUNZIONE GRAMMATICALE",
+          "definition": "definizione dettagliata che spiega la funzione grammaticale"
         }
       ],
-      "sentenceType": "simple|compound|complex",
+      "sentenceType": "semplice|composta|complessa",
       "confidence": 0.95
     }
     
-    For each word/phrase, identify its grammatical function:
-    - SUBJECT: The person, animal, or thing that performs or undergoes the action
-    - VERBAL PREDICATE: The action performed or undergone by the subject
-    - DIRECT OBJECT: The noun or pronoun that receives the action of the verb directly
-    - INDIRECT OBJECT: The noun or pronoun that receives the direct object or benefits from the action
-    - SUBJECT COMPLEMENT: A word or phrase that follows a linking verb and describes or renames the subject
-    - OBJECT COMPLEMENT: A word or phrase that follows and modifies the direct object
-    - PREPOSITIONAL PHRASE: A phrase that begins with a preposition and ends with a noun or pronoun
-    - ADVERBIAL PHRASE: A phrase that modifies a verb, adjective, or adverb
-    - ADJECTIVAL PHRASE: A phrase that modifies a noun or pronoun
-    - APPOSITIVE: A noun or noun phrase that renames or explains another noun
-    - PARTICIPLE PHRASE: A phrase that begins with a participle and modifies a noun
-    - GERUND PHRASE: A phrase that begins with a gerund and functions as a noun
-    - INFINITIVE PHRASE: A phrase that begins with an infinitive
-    - ABSOLUTE PHRASE: A phrase that modifies the entire sentence
-    - NOUN CLAUSE: A clause that functions as a noun
-    - ADJECTIVE CLAUSE: A clause that modifies a noun or pronoun
-    - ADVERB CLAUSE: A clause that modifies a verb, adjective, or adverb
-    - ARTICLE: A word that specifies a noun
-    - ADJECTIVE: A word that modifies a noun or pronoun
-    - ADVERB: A word that modifies a verb, adjective, or adverb
-    - CONJUNCTION: A word that connects words, phrases, or clauses
-    - PREPOSITION: A word that shows the relationship between a noun/pronoun and other words
-    - PRONOUN: A word that takes the place of a noun
-    - DETERMINER: A word that introduces a noun
+    Per ogni parola/frase, identifica la sua funzione grammaticale:
+    - SOGGETTO: La persona, animale o cosa che compie o subisce l'azione
+    - PREDICATO VERBALE: L'azione compiuta o subita dal soggetto
+    - COMPLEMENTO OGGETTO: Il sostantivo o pronome che riceve direttamente l'azione del verbo
+    - COMPLEMENTO DI TERMINE: Il sostantivo o pronome che riceve l'oggetto diretto o beneficia dell'azione
+    - COMPLEMENTO PREDICATIVO DEL SOGGETTO: Una parola o frase che segue un verbo copulativo e descrive o rinomina il soggetto
+    - COMPLEMENTO PREDICATIVO DELL'OGGETTO: Una parola o frase che segue e modifica l'oggetto diretto
+    - COMPLEMENTO DI SPECIFICAZIONE: Specifica il significato del termine a cui si riferisce
+    - COMPLEMENTO DI LUOGO: Indica dove avviene l'azione o dove si trova qualcuno o qualcosa
+    - COMPLEMENTO DI TEMPO: Indica il momento o periodo di tempo in cui avviene l'azione
+    - COMPLEMENTO DI CAUSA: Indica il motivo o la causa per cui qualcosa viene fatto o accade
+    - COMPLEMENTO DI FINE O SCOPO: Indica verso quale fine è diretta l'azione
+    - COMPLEMENTO DI MEZZO O STRUMENTO: Indica il mezzo o strumento usato per compiere l'azione
+    - COMPLEMENTO DI MODO O MANIERA: Indica il modo in cui si svolge l'azione
+    - COMPLEMENTO DI COMPAGNIA: Indica la persona o animale con cui qualcuno si trova
+    - COMPLEMENTO DI MATERIA: Indica il materiale di cui è fatto un oggetto
+    - COMPLEMENTO DI QUALITÀ: Indica una qualità o caratteristica di qualcuno o qualcosa
+    - COMPLEMENTO DI QUANTITÀ: Indica la quantità o misura di qualcuno o qualcosa
+    - COMPLEMENTO DI ETÀ: Specifica l'età di qualcuno o qualcosa
+    - COMPLEMENTO DI PREZZO: Indica il costo di qualcosa
+    - COMPLEMENTO DI VANTAGGIO: Indica la persona o cosa per cui si compie l'azione
+    - COMPLEMENTO DI SVANTAGGIO: Indica la persona o cosa a danno della quale si compie l'azione
+    - COMPLEMENTO DI SOSTITUZIONE: Indica qualcuno o qualcosa che viene sostituito
+    - COMPLEMENTO DI ESCLUSIONE: Indica chi o cosa rimane escluso
+    - COMPLEMENTO CONCESSIVO: Indica nonostante cosa o chi si realizza l'azione
+    - COMPLEMENTO DI COLPA: Indica la colpa o il reato di cui qualcuno è accusato
+    - COMPLEMENTO DI PENA: Indica la condanna o pena inflitta
+    - COMPLEMENTO VOCATIVO: Indica la persona o essere animato di cui si vuole richiamare l'attenzione
+    - ARTICOLO: Una parola che specifica un sostantivo
+    - AGGETTIVO: Una parola che modifica un sostantivo o pronome
+    - AVVERBIO: Una parola che modifica un verbo, aggettivo o altro avverbio
+    - CONGIUNZIONE: Una parola che collega parole, frasi o proposizioni
+    - PREPOSIZIONE: Una parola che mostra la relazione tra un sostantivo/pronome e altre parole
+    - PRONOME: Una parola che sostituisce un sostantivo
+    - DETERMINANTE: Una parola che introduce un sostantivo
     
-    Provide detailed definitions for each grammatical function. Be educational and precise.
+    Fornisci definizioni dettagliate per ogni funzione grammaticale. Sii educativo e preciso.
     `;
     
     const result = await model.generateContent(prompt);
