@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { analyzeLogic } from "./logic-analysis";
 import { getAllComplements, type ComplementInfo } from "./complement-reference";
 
@@ -21,6 +21,68 @@ export default function Home() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showReference, setShowReference] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Speech-to-text state
+  const [speechSupported, setSpeechSupported] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const hasSpeech = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      setSpeechSupported(Boolean(hasSpeech));
+    }
+  }, []);
+
+  const startListening = () => {
+    if (!speechSupported || isListening) return;
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) return;
+    const recognition = new SpeechRecognition();
+    recognition.lang = "it-IT";
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onresult = (event: any) => {
+      let interim = "";
+      let finalChunk = "";
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalChunk += transcript + " ";
+        } else {
+          interim += transcript;
+        }
+      }
+      if (finalChunk) {
+        setInputText((prev) => {
+          const spaced = prev && !prev.endsWith(" ") ? prev + " " : prev;
+          const combined = (spaced + finalChunk).trim();
+          return combined.length > 500 ? combined.slice(0, 500) : combined;
+        });
+        if (error) setError(null);
+      }
+    };
+
+    recognition.onerror = () => {
+      setIsListening(false);
+    };
+    recognition.onend = () => {
+      // Do not auto-restart to keep UX predictable
+      setIsListening(false);
+    };
+
+    recognition.start();
+    recognitionRef.current = recognition;
+    setIsListening(true);
+  };
+
+  const stopListening = () => {
+    if (recognitionRef.current) {
+      try { recognitionRef.current.stop(); } catch {}
+      recognitionRef.current = null;
+    }
+    setIsListening(false);
+  };
 
   const handleAnalyze = async () => {
     if (!inputText.trim()) return;
@@ -53,9 +115,37 @@ export default function Home() {
         <div className="max-w-4xl mx-auto">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
             <div className="mb-4">
-              <label htmlFor="sentence-input" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Quale frase devo analizzare?
-              </label>
+              <div className="flex items-center justify-between mb-2">
+                <label htmlFor="sentence-input" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Quale frase devo analizzare?
+                </label>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={isListening ? stopListening : startListening}
+                    disabled={!speechSupported}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm border transition-colors ${
+                      isListening
+                        ? "bg-red-600 border-red-700 text-white hover:bg-red-700"
+                        : speechSupported
+                          ? "bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
+                          : "bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-400 cursor-not-allowed"
+                    }`}
+                  >
+                    {/* mic icon */}
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
+                      <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Z"/>
+                      <path d="M19 11a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V21H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-3.08A7 7 0 0 0 19 11Z"/>
+                    </svg>
+                    {isListening ? "Ferma dettatura" : speechSupported ? "Dettatura" : "Non supportato"}
+                  </button>
+                </div>
+              </div>
+              {!speechSupported && (
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+                  Il riconoscimento vocale non è supportato nel tuo browser. Prova con Chrome su desktop.
+                </p>
+              )}
               <textarea
                 id="sentence-input"
                 value={inputText}
