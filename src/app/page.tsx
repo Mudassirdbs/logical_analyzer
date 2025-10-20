@@ -53,6 +53,7 @@ export default function Home() {
   const [speechSupported, setSpeechSupported] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<ISpeechRecognition | null>(null);
+  const [interimText, setInterimText] = useState("");
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -60,6 +61,12 @@ export default function Home() {
       setSpeechSupported(Boolean(hasSpeech));
     }
   }, []);
+
+  const composeLive = (base: string, interim: string) => {
+    const spaced = base && !base.endsWith(" ") ? base + " " : base;
+    const combined = (spaced + interim).trim();
+    return combined.length > 500 ? combined.slice(0, 500) : combined;
+  };
 
   const startListening = () => {
     if (!speechSupported || isListening) return;
@@ -81,12 +88,9 @@ export default function Home() {
           interim += transcript;
         }
       }
+      setInterimText(interim);
       if (finalChunk) {
-        setInputText((prev) => {
-          const spaced = prev && !prev.endsWith(" ") ? prev + " " : prev;
-          const combined = (spaced + finalChunk).trim();
-          return combined.length > 500 ? combined.slice(0, 500) : combined;
-        });
+        setInputText((prev) => composeLive(prev, finalChunk));
         if (error) setError(null);
       }
     };
@@ -96,6 +100,7 @@ export default function Home() {
     };
     recognition.onend = () => {
       setIsListening(false);
+      setInterimText("");
     };
 
     recognition.start();
@@ -109,6 +114,7 @@ export default function Home() {
       recognitionRef.current = null;
     }
     setIsListening(false);
+    setInterimText("");
   };
 
   const handleAnalyze = async () => {
@@ -135,6 +141,10 @@ export default function Home() {
     "Noi mangiamo la pizza insieme"
   ];
 
+  const displayedText = isListening && interimText
+    ? composeLive(inputText, interimText)
+    : inputText;
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
       <div className="container mx-auto px-4 py-8">
@@ -153,7 +163,7 @@ export default function Home() {
                     className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm border transition-colors ${isListening
                       ? "bg-red-600 border-red-700 text-white hover:bg-red-700"
                       : speechSupported
-                        ? "bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
+                        ? "bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hoverbg-gray-600"
                         : "bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-400 cursor-not-allowed"
                       }`}
                   >
@@ -172,9 +182,10 @@ export default function Home() {
               )}
               <textarea
                 id="sentence-input"
-                value={inputText}
+                value={displayedText}
                 onChange={(e) => {
                   setInputText(e.target.value);
+                  setInterimText("");
                   if (error) setError(null);
                 }}
                 placeholder="Inserisci la tua frase qui..."
@@ -185,8 +196,8 @@ export default function Home() {
                 <span className="text-xs text-gray-500 dark:text-gray-400">
                   Limite: 500 caratteri
                 </span>
-                <span className={`text-xs ${inputText.length > 450 ? 'text-red-500' : 'text-gray-500 dark:text-gray-400'}`}>
-                  {inputText.length}/500
+                <span className={`text-xs ${displayedText.length > 450 ? 'text-red-500' : 'text-gray-500 dark:text-gray-400'}`}>
+                  {displayedText.length}/500
                 </span>
               </div>
             </div>
@@ -231,6 +242,7 @@ export default function Home() {
                   key={index}
                   onClick={() => {
                     setInputText(sentence);
+                    setInterimText("");
                     if (error) setError(null);
                   }}
                   className="px-3 py-1 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-full text-sm transition-colors duration-200"
