@@ -2,7 +2,36 @@
 
 import { useState, useEffect, useRef } from "react";
 import { analyzeLogic } from "./logic-analysis";
-import { getAllComplements, type ComplementInfo } from "./complement-reference";
+
+declare global {
+  interface Window {
+    SpeechRecognition?: SpeechRecognitionConstructor;
+    webkitSpeechRecognition?: SpeechRecognitionConstructor;
+  }
+}
+
+interface SpeechRecognitionEventResult {
+  0: { transcript: string };
+  isFinal: boolean;
+}
+
+interface SpeechRecognitionEvent {
+  resultIndex: number;
+  results: SpeechRecognitionEventResult[];
+}
+
+interface ISpeechRecognition {
+  lang: string;
+  continuous: boolean;
+  interimResults: boolean;
+  onresult: (event: SpeechRecognitionEvent) => void;
+  onerror: (event: Event) => void;
+  onend: () => void;
+  start: () => void;
+  stop: () => void;
+}
+
+type SpeechRecognitionConstructor = new () => ISpeechRecognition;
 
 interface AnalysisResult {
   sentence: string;
@@ -21,28 +50,27 @@ export default function Home() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showReference, setShowReference] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // Speech-to-text state
   const [speechSupported, setSpeechSupported] = useState(false);
   const [isListening, setIsListening] = useState(false);
-  const recognitionRef = useRef<any>(null);
+  const recognitionRef = useRef<ISpeechRecognition | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const hasSpeech = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      const hasSpeech = window.SpeechRecognition || window.webkitSpeechRecognition;
       setSpeechSupported(Boolean(hasSpeech));
     }
   }, []);
 
   const startListening = () => {
     if (!speechSupported || isListening) return;
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) return;
     const recognition = new SpeechRecognition();
     recognition.lang = "it-IT";
     recognition.continuous = true;
     recognition.interimResults = true;
 
-    recognition.onresult = (event: any) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       let interim = "";
       let finalChunk = "";
       for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -67,7 +95,6 @@ export default function Home() {
       setIsListening(false);
     };
     recognition.onend = () => {
-      // Do not auto-restart to keep UX predictable
       setIsListening(false);
     };
 
@@ -78,7 +105,7 @@ export default function Home() {
 
   const stopListening = () => {
     if (recognitionRef.current) {
-      try { recognitionRef.current.stop(); } catch {}
+      try { recognitionRef.current.stop(); } catch { }
       recognitionRef.current = null;
     }
     setIsListening(false);
@@ -111,7 +138,6 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
       <div className="container mx-auto px-4 py-8">
-        {/* Main Analysis Interface */}
         <div className="max-w-4xl mx-auto">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
             <div className="mb-4">
@@ -124,18 +150,16 @@ export default function Home() {
                     type="button"
                     onClick={isListening ? stopListening : startListening}
                     disabled={!speechSupported}
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm border transition-colors ${
-                      isListening
-                        ? "bg-red-600 border-red-700 text-white hover:bg-red-700"
-                        : speechSupported
-                          ? "bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
-                          : "bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-400 cursor-not-allowed"
-                    }`}
+                    className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm border transition-colors ${isListening
+                      ? "bg-red-600 border-red-700 text-white hover:bg-red-700"
+                      : speechSupported
+                        ? "bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
+                        : "bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-400 cursor-not-allowed"
+                      }`}
                   >
-                    {/* mic icon */}
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
-                      <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Z"/>
-                      <path d="M19 11a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V21H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-3.08A7 7 0 0 0 19 11Z"/>
+                      <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Z" />
+                      <path d="M19 11a1 1 0 1 0-2 0 5 5 0 0 1-10 0 1 1 0 1 0-2 0 7 7 0 0 0 6 6.92V21H9a1 1 0 1 0 0 2h6a1 1 0 1 0 0-2h-2v-3.08A7 7 0 0 0 19 11Z" />
                     </svg>
                     {isListening ? "Ferma dettatura" : speechSupported ? "Dettatura" : "Non supportato"}
                   </button>
@@ -186,7 +210,6 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Error Display */}
           {error && (
             <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
               <div className="flex items-center">
@@ -200,7 +223,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* Example Sentences */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Frasi di Esempio</h3>
             <div className="flex flex-wrap gap-2">
@@ -219,12 +241,9 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Results */}
           {result && (
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
               <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Analisi Logica</h2>
-
-              {/* Sentence Display */}
               <div className="mb-6">
                 <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Analisi logica della frase:
@@ -234,7 +253,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Word-by-Word Analysis */}
               <div className="space-y-3">
                 {result.wordAnalysis.map((analysis, index) => (
                   <div key={index} className="flex flex-col sm:flex-row sm:items-start gap-2 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
@@ -253,7 +271,6 @@ export default function Home() {
                 ))}
               </div>
 
-              {/* Analysis Summary */}
               <div className="mt-6 grid md:grid-cols-2 gap-4">
                 <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
                   <div className="text-sm font-medium text-purple-800 dark:text-purple-200">Tipo di Frase</div>
@@ -265,7 +282,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Disclaimer */}
               <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border-l-4 border-yellow-400">
                 <p className="text-sm text-yellow-800 dark:text-yellow-200">
                   <strong>Nota:</strong> Poiché viene elaborata automaticamente, lo strumento di analisi logica online è soggetto a errori.
@@ -275,7 +291,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* Help Section */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mt-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Cos&apos;è l&apos;Analisi Logica?</h3>
@@ -291,33 +306,6 @@ export default function Home() {
               Questo strumento utilizza librerie NLP avanzate e AI per identificare automaticamente questi elementi grammaticali e aiutarti a comprendere la struttura delle frasi italiane.
             </p>
 
-            {showReference && (
-              <div className="mt-6">
-                <h4 className="text-md font-semibold text-gray-800 dark:text-white mb-4">Riferimento Completo dei Complementi</h4>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-96 overflow-y-auto">
-                  {getAllComplements().map((complement: ComplementInfo, index: number) => (
-                    <div key={index} className="p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-                      <div className="text-sm font-medium text-gray-800 dark:text-white mb-1">
-                        {complement.name}
-                      </div>
-                      <div className="text-xs text-gray-600 dark:text-gray-300 mb-2">
-                        {complement.definition}
-                      </div>
-                      {complement.prepositions && complement.prepositions.length > 0 && (
-                        <div className="text-xs text-blue-600 dark:text-blue-400">
-                          Preposizioni: {complement.prepositions.join(', ')}
-                        </div>
-                      )}
-                      {complement.examples && complement.examples.length > 0 && (
-                        <div className="text-xs text-green-600 dark:text-green-400 mt-1">
-                          Esempio: {complement.examples[0]}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>

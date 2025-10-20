@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-// Initialize Gemini AI on the server side
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { text } = body;
-    
+
     if (!text || !text.trim()) {
       return NextResponse.json(
         { error: 'No text provided' },
@@ -31,7 +30,7 @@ export async function POST(request: NextRequest) {
     }
 
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
-    
+
     const prompt = `
     Esegui un'analisi logica dettagliata di questa frase italiana: "${text}"
     
@@ -87,12 +86,11 @@ export async function POST(request: NextRequest) {
     
     Fornisci definizioni dettagliate per ogni funzione grammaticale. Sii educativo e preciso.
     `;
-    
+
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const responseText = response.text();
-    
-    // Extract JSON from markdown code blocks if present
+
     let jsonText = responseText;
     if (responseText.includes('```json')) {
       const jsonMatch = responseText.match(/```json\n([\s\S]*?)\n```/);
@@ -105,15 +103,14 @@ export async function POST(request: NextRequest) {
         jsonText = jsonMatch[1];
       }
     }
-    
+
     const analysis = JSON.parse(jsonText);
-    
+
     return NextResponse.json(analysis);
-    
+
   } catch (error) {
     console.error('Analysis API error:', error);
-    
-    // Return a fallback response if AI fails
+
     const fallbackAnalysis = {
       sentence: 'Unable to analyze',
       wordAnalysis: [{
@@ -124,7 +121,7 @@ export async function POST(request: NextRequest) {
       sentenceType: 'simple',
       confidence: 0.1
     };
-    
+
     return NextResponse.json(fallbackAnalysis);
   }
 }
