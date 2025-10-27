@@ -324,23 +324,6 @@ export default function Home() {
               </div>
             </div>
           )}
-
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mt-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold text-gray-800 dark:text-white">Cos&apos;è l&apos;Analisi Logica?</h3>
-              <button
-                onClick={() => setShowReference(!showReference)}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded-md transition-colors duration-200"
-              >
-                {showReference ? 'Nascondi Riferimento' : 'Mostra Riferimento Complementi'}
-              </button>
-            </div>
-            <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
-              L&apos;analisi logica consiste nel trovare il soggetto, il predicato e i vari complementi di una frase.
-              Questo strumento utilizza librerie NLP avanzate e AI per identificare automaticamente questi elementi grammaticali e aiutarti a comprendere la struttura delle frasi italiane.
-            </p>
-
-          </div>
         </div>
       </div>
     </div>
