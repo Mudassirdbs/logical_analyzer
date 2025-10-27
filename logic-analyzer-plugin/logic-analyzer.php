@@ -1,4 +1,12 @@
 <?php
+/*
+Plugin Name: Logic Analyzer
+Description: logical analysis
+Version: 1.0
+Author: Your Name
+Author URI: https://yourwebsite.com/
+*/
+
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -24,7 +32,7 @@ function logic_analyzer_embed_responsive_shortcode()
                 const iframe = document.getElementById("' . esc_js($iframe_id) . '");
 
                 window.addEventListener("message", function(event) {
-                    if (event.origin !== "https://logic-analyzer.vercel.app/") {
+                    if (event.origin !== "https://logic-analyzer.vercel.app") {
                         console.warn("Message from untrusted origin ignored:", event.origin);
                         return;
                     }
