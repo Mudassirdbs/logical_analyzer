@@ -49,6 +49,7 @@ interface ThemeColors {
   backgroundColor: string;
   linkColor: string;
   borderColor: string;
+  buttonColor?: string;
 }
 
 export default function Home() {
@@ -80,6 +81,9 @@ export default function Home() {
         root.style.setProperty('--wp-bg-color', event.data.colors.backgroundColor);
         root.style.setProperty('--wp-link-color', event.data.colors.linkColor);
         root.style.setProperty('--wp-border-color', event.data.colors.borderColor);
+        if (event.data.colors.buttonColor) {
+          root.style.setProperty('--wp-button-color', event.data.colors.buttonColor);
+        }
       }
     };
 
@@ -209,21 +213,23 @@ export default function Home() {
     ? composeLive(inputText, interimText)
     : inputText;
 
-  const mainBackgroundStyle = theme ? {
+  const bodyStyle = theme ? {
     backgroundColor: 'var(--wp-bg-color)',
+    color: 'var(--wp-text-color)',
   } : {};
 
   const cardStyle = theme ? {
     backgroundColor: 'var(--wp-bg-color)',
     color: 'var(--wp-text-color)',
     borderColor: 'var(--wp-border-color)',
+    border: '1px solid var(--wp-border-color)',
   } : {};
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800" style={mainBackgroundStyle}>
+    <div className="min-h-screen" style={bodyStyle}>
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6" style={cardStyle}>
+          <div className="rounded-lg shadow-lg p-6 mb-6" style={cardStyle}>
             <div className="mb-4">
               <div className="flex items-center justify-between mb-2">
                 <label htmlFor="sentence-input" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -264,7 +270,12 @@ export default function Home() {
                 }}
                 placeholder="Inserisci la tua frase qui..."
                 maxLength={500}
-                className="w-full h-24 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white resize-none"
+                className="w-full h-24 px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                style={theme ? { 
+                  backgroundColor: 'var(--wp-bg-color)', 
+                  color: 'var(--wp-text-color)',
+                  borderColor: 'var(--wp-border-color)'
+                } : {}}
               />
               <div className="flex justify-between items-center mt-1">
                 <span className="text-xs text-gray-500 dark:text-gray-400">
@@ -279,7 +290,13 @@ export default function Home() {
             <button
               onClick={handleAnalyze}
               disabled={!inputText.trim() || isAnalyzing}
-              className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white font-medium py-3 px-4 rounded-md transition-colors duration-200 flex items-center justify-center"
+              className="w-full text-white font-medium py-3 px-4 rounded-md transition-colors duration-200 flex items-center justify-center"
+              style={!inputText.trim() || isAnalyzing 
+                ? {} 
+                : theme 
+                  ? { backgroundColor: 'var(--wp-button-color)', color: '#ffffff' }
+                  : { backgroundColor: '#2563eb' }
+              }
             >
               {isAnalyzing ? (
                 <>
@@ -308,8 +325,8 @@ export default function Home() {
             </div>
           )}
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-3">Frasi di Esempio</h3>
+          <div className="rounded-lg shadow-lg p-6 mb-6" style={cardStyle}>
+            <h3 className="text-lg font-semibold mb-3" style={theme ? { color: 'var(--wp-text-color)' } : {}}>Frasi di Esempio</h3>
             <div className="flex flex-wrap gap-2">
               {exampleSentences.map((sentence, index) => (
                 <button
@@ -328,8 +345,8 @@ export default function Home() {
           </div>
 
           {result && (
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-              <h2 className="text-xl font-semibold text-gray-800 dark:text-white mb-4">Analisi Logica</h2>
+            <div className="rounded-lg shadow-lg p-6" style={cardStyle}>
+              <h2 className="text-xl font-semibold mb-4" style={theme ? { color: 'var(--wp-text-color)' } : {}}>Analisi Logica</h2>
               <div className="mb-6">
                 <h3 className="text-lg font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Analisi logica della frase:
