@@ -44,6 +44,13 @@ interface AnalysisResult {
   confidence: number;
 }
 
+interface ThemeColors {
+  textColor: string;
+  backgroundColor: string;
+  linkColor: string;
+  borderColor: string;
+}
+
 export default function Home() {
   const [inputText, setInputText] = useState("");
   const [result, setResult] = useState<AnalysisResult | null>(null);
@@ -54,6 +61,7 @@ export default function Home() {
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<ISpeechRecognition | null>(null);
   const [interimText, setInterimText] = useState("");
+  const [theme, setTheme] = useState<ThemeColors | null>(null);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -63,25 +71,59 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data && event.data.type === 'wp-theme' && event.data.colors) {
+        setTheme(event.data.colors);
+        
+        const root = document.documentElement;
+        root.style.setProperty('--wp-text-color', event.data.colors.textColor);
+        root.style.setProperty('--wp-bg-color', event.data.colors.backgroundColor);
+        root.style.setProperty('--wp-link-color', event.data.colors.linkColor);
+        root.style.setProperty('--wp-border-color', event.data.colors.borderColor);
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    let lastHeight = 0;
+    let throttleTimeout: NodeJS.Timeout | null = null;
+
     const sendHeightToParent = () => {
       if (window.parent && window.parent !== window) {
         const height = document.documentElement.scrollHeight;
-        window.parent.postMessage({ height }, '*');
+        if (Math.abs(height - lastHeight) > 20) {
+          window.parent.postMessage({ height }, '*');
+          lastHeight = height;
+        }
       }
+    };
+
+    const throttledSendHeight = () => {
+      if (throttleTimeout) {
+        clearTimeout(throttleTimeout);
+      }
+      throttleTimeout = setTimeout(sendHeightToParent, 300);
     };
 
     sendHeightToParent();
     
-    const observer = new ResizeObserver(() => {
-      sendHeightToParent();
-    });
-
+    const observer = new ResizeObserver(throttledSendHeight);
     const targetElement = document.body;
     if (targetElement) {
       observer.observe(targetElement);
     }
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (throttleTimeout) {
+        clearTimeout(throttleTimeout);
+      }
+    };
   }, [result, showReference]);
 
   const composeLive = (base: string, interim: string) => {
@@ -167,11 +209,21 @@ export default function Home() {
     ? composeLive(inputText, interimText)
     : inputText;
 
+  const mainBackgroundStyle = theme ? {
+    backgroundColor: 'var(--wp-bg-color)',
+  } : {};
+
+  const cardStyle = theme ? {
+    backgroundColor: 'var(--wp-bg-color)',
+    color: 'var(--wp-text-color)',
+    borderColor: 'var(--wp-border-color)',
+  } : {};
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800" style={mainBackgroundStyle}>
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6" style={cardStyle}>
             <div className="mb-4">
               <div className="flex items-center justify-between mb-2">
                 <label htmlFor="sentence-input" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
