@@ -240,12 +240,15 @@ export default function Home() {
                     type="button"
                     onClick={isListening ? stopListening : startListening}
                     disabled={!speechSupported}
-                    className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm border transition-colors ${isListening
-                      ? "bg-red-600 border-red-700 text-white hover:bg-red-700"
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm border transition-colors"
+                    style={isListening 
+                      ? { backgroundColor: '#dc2626', borderColor: '#b91c1c', color: '#ffffff' }
                       : speechSupported
-                        ? "bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hoverbg-gray-600"
-                        : "bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-400 cursor-not-allowed"
-                      }`}
+                        ? theme 
+                          ? { backgroundColor: 'var(--wp-bg-color)', borderColor: 'var(--wp-border-color)', color: 'var(--wp-text-color)' }
+                          : { backgroundColor: '#f3f4f6', borderColor: '#e5e7eb', color: '#1f2937' }
+                        : { backgroundColor: '#f3f4f6', borderColor: '#e5e7eb', color: '#9ca3af' }
+                    }
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
                       <path d="M12 14a3 3 0 0 0 3-3V6a3 3 0 1 0-6 0v5a3 3 0 0 0 3 3Z" />
@@ -336,7 +339,15 @@ export default function Home() {
                     setInterimText("");
                     if (error) setError(null);
                   }}
-                  className="px-3 py-1 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-full text-sm transition-colors duration-200"
+                  className="px-3 py-1 rounded-full text-sm transition-colors duration-200"
+                  style={theme 
+                    ? { 
+                        backgroundColor: 'var(--wp-bg-color)', 
+                        color: 'var(--wp-text-color)',
+                        border: '1px solid var(--wp-border-color)'
+                      }
+                    : {}
+                  }
                 >
                   {sentence}
                 </button>
