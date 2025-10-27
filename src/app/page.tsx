@@ -74,6 +74,7 @@ export default function Home() {
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data && event.data.type === 'wp-theme' && event.data.colors) {
+        console.log('event.data.colors', event.data.colors);
         setTheme(event.data.colors);
         
         const root = document.documentElement;
@@ -229,7 +230,7 @@ export default function Home() {
     <div className="min-h-screen" style={bodyStyle}>
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
-          <div className="rounded-lg shadow-lg p-6 mb-6" style={cardStyle}>
+          <div className="rounded-lg shadow-lg p-6 mb-6 border border-black-500" style={cardStyle}>
             <div className="mb-4">
               <div className="flex items-center justify-between mb-2">
                 <label htmlFor="sentence-input" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -273,7 +274,7 @@ export default function Home() {
                 }}
                 placeholder="Inserisci la tua frase qui..."
                 maxLength={500}
-                className="w-full h-24 px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                className="w-full h-24 px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none border"
                 style={theme ? { 
                   backgroundColor: 'var(--wp-bg-color)', 
                   color: 'var(--wp-text-color)',
@@ -293,12 +294,12 @@ export default function Home() {
             <button
               onClick={handleAnalyze}
               disabled={!inputText.trim() || isAnalyzing}
-              className="w-full text-white font-medium py-3 px-4 rounded-md transition-colors duration-200 flex items-center justify-center"
+              className="w-full font-medium py-3 px-4 rounded-md transition-colors duration-200 flex items-center justify-center text-black-500 border border-black-500 cursor-pointer"
               style={!inputText.trim() || isAnalyzing 
-                ? {} 
-                : theme 
+                ? {}
+                : theme
                   ? { backgroundColor: 'var(--wp-button-color)', color: '#ffffff' }
-                  : { backgroundColor: '#2563eb' }
+                  : { backgroundColor: theme ? 'var(--wp-button-color)' : '#2563eb', color: '#ffffff' }
               }
             >
               {isAnalyzing ? (
@@ -328,7 +329,7 @@ export default function Home() {
             </div>
           )}
 
-          <div className="rounded-lg shadow-lg p-6 mb-6" style={cardStyle}>
+          <div className="rounded-lg shadow-lg p-6 mb-6 border border-black-500" style={cardStyle}>
             <h3 className="text-lg font-semibold mb-3" style={theme ? { color: 'var(--wp-text-color)' } : {}}>Frasi di Esempio</h3>
             <div className="flex flex-wrap gap-2">
               {exampleSentences.map((sentence, index) => (
@@ -339,7 +340,7 @@ export default function Home() {
                     setInterimText("");
                     if (error) setError(null);
                   }}
-                  className="px-3 py-1 rounded-full text-sm transition-colors duration-200"
+                  className="px-3 py-1 rounded-full text-sm transition-colors duration-200 border border-black-500 cursor-pointer"
                   style={theme 
                     ? { 
                         backgroundColor: 'var(--wp-bg-color)', 
