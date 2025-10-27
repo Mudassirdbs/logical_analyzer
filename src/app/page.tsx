@@ -62,6 +62,28 @@ export default function Home() {
     }
   }, []);
 
+  useEffect(() => {
+    const sendHeightToParent = () => {
+      if (window.parent && window.parent !== window) {
+        const height = document.documentElement.scrollHeight;
+        window.parent.postMessage({ height }, '*');
+      }
+    };
+
+    sendHeightToParent();
+    
+    const observer = new ResizeObserver(() => {
+      sendHeightToParent();
+    });
+
+    const targetElement = document.body;
+    if (targetElement) {
+      observer.observe(targetElement);
+    }
+
+    return () => observer.disconnect();
+  }, [result, showReference]);
+
   const composeLive = (base: string, interim: string) => {
     const spaced = base && !base.endsWith(" ") ? base + " " : base;
     const combined = (spaced + interim).trim();
