@@ -227,7 +227,7 @@ export default function Home() {
   } : {};
 
   return (
-    <div className="min-h-screen" style={bodyStyle}>
+    <div style={bodyStyle}>
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="rounded-lg shadow-lg p-6 mb-6 border border-black-500" style={cardStyle}>
