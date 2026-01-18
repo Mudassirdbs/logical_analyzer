@@ -102,7 +102,7 @@ export default function Home() {
       if (window.parent && window.parent !== window) {
         const height = document.documentElement.scrollHeight;
         if (Math.abs(height - lastHeight) > 20) {
-          window.parent.postMessage({ height }, '*');
+          // window.parent.postMessage({ height }, '*');
           lastHeight = height;
         }
       }
