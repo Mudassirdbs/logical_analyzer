@@ -76,7 +76,7 @@ export default function Home() {
       if (event.data && event.data.type === 'wp-theme' && event.data.colors) {
         console.log('event.data.colors', event.data.colors);
         setTheme(event.data.colors);
-        
+
         const root = document.documentElement;
         root.style.setProperty('--wp-text-color', event.data.colors.textColor);
         root.style.setProperty('--wp-bg-color', event.data.colors.backgroundColor);
@@ -102,8 +102,12 @@ export default function Home() {
       if (window.parent && window.parent !== window) {
         const height = document.documentElement.scrollHeight;
         if (Math.abs(height - lastHeight) > 20) {
+          console.log('result', result, height);
+          if (result) {
             // window.parent.postMessage({ height }, '*');
-          lastHeight = height;
+          }
+          // window.parent.postMessage({ height }, '*');
+          // lastHeight = height;
         }
       }
     };
@@ -116,7 +120,7 @@ export default function Home() {
     };
 
     sendHeightToParent();
-    
+
     const observer = new ResizeObserver(throttledSendHeight);
     const targetElement = document.body;
     if (targetElement) {
@@ -242,10 +246,10 @@ export default function Home() {
                     onClick={isListening ? stopListening : startListening}
                     disabled={!speechSupported}
                     className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm border transition-colors"
-                    style={isListening 
+                    style={isListening
                       ? { backgroundColor: '#dc2626', borderColor: '#b91c1c', color: '#ffffff' }
                       : speechSupported
-                        ? theme 
+                        ? theme
                           ? { backgroundColor: 'var(--wp-bg-color)', borderColor: 'var(--wp-border-color)', color: 'var(--wp-text-color)' }
                           : { backgroundColor: '#f3f4f6', borderColor: '#e5e7eb', color: '#1f2937' }
                         : { backgroundColor: '#f3f4f6', borderColor: '#e5e7eb', color: '#9ca3af' }
@@ -275,8 +279,8 @@ export default function Home() {
                 placeholder="Inserisci la tua frase qui..."
                 maxLength={500}
                 className="w-full h-24 px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none border"
-                style={theme ? { 
-                  backgroundColor: 'var(--wp-bg-color)', 
+                style={theme ? {
+                  backgroundColor: 'var(--wp-bg-color)',
                   color: 'var(--wp-text-color)',
                   borderColor: 'var(--wp-border-color)'
                 } : {}}
@@ -295,7 +299,7 @@ export default function Home() {
               onClick={handleAnalyze}
               disabled={!inputText.trim() || isAnalyzing}
               className="w-full font-medium py-3 px-4 rounded-md transition-colors duration-200 flex items-center justify-center text-black-500 border border-black-500 cursor-pointer"
-              style={!inputText.trim() || isAnalyzing 
+              style={!inputText.trim() || isAnalyzing
                 ? {}
                 : theme
                   ? { backgroundColor: 'var(--wp-button-color)', color: '#ffffff' }
@@ -341,12 +345,12 @@ export default function Home() {
                     if (error) setError(null);
                   }}
                   className="px-3 py-1 rounded-full text-sm transition-colors duration-200 border border-black-500 cursor-pointer"
-                  style={theme 
-                    ? { 
-                        backgroundColor: 'var(--wp-bg-color)', 
-                        color: 'var(--wp-text-color)',
-                        border: '1px solid var(--wp-border-color)'
-                      }
+                  style={theme
+                    ? {
+                      backgroundColor: 'var(--wp-bg-color)',
+                      color: 'var(--wp-text-color)',
+                      border: '1px solid var(--wp-border-color)'
+                    }
                     : {}
                   }
                 >
