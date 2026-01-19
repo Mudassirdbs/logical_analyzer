@@ -29,6 +29,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Log API key presence (do not log the full key)
+    console.log('API Key present:', !!process.env.GEMINI_API_KEY);
+    if (process.env.GEMINI_API_KEY) {
+      console.log('API Key prefix:', process.env.GEMINI_API_KEY.substring(0, 4));
+    }
+
+    // Use a standard valid model name
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const prompt = `
@@ -91,6 +98,8 @@ export async function POST(request: NextRequest) {
     const response = await result.response;
     const responseText = response.text();
 
+    console.log('Model response:', responseText);
+
     let jsonText = responseText;
     if (responseText.includes('```json')) {
       const jsonMatch = responseText.match(/```json\n([\s\S]*?)\n```/);
@@ -110,6 +119,11 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Analysis API error:', error);
+    // @ts-ignore
+    if (error.response) {
+      // @ts-ignore
+      console.error('API Error Response:', JSON.stringify(error.response, null, 2));
+    }
     console.error('Error message:', error instanceof Error ? error.message : 'Unknown error');
     console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
 
