@@ -105,7 +105,7 @@ export default function Home() {
           height = Math.max(height, 600);
 
           if (Math.abs(height - lastHeight) > 20) {
-            console.log('result', result, height);
+            console.log('result', result, height, height > 0);
             if (height > 0) {
               window.parent.postMessage({ height }, '*');
             }

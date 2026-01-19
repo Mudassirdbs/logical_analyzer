@@ -34,6 +34,7 @@ function logic_analyzer_embed_responsive_shortcode()
             let currentHeight = 600;
 
             window.addEventListener("message", function(event) {
+                console.log('event', event);
                 if (event.origin !== "https://logic-analyzer.vercel.app") {
                     return;
                 }
