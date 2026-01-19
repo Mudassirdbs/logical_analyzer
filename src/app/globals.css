@@ -36,11 +36,11 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0f172a;
-    --foreground: #f1f5f9;
-    --glass-bg: rgba(15, 23, 42, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    --background: #f8fafc;
+    --foreground: #1e293b;
+    --glass-bg: rgba(248, 250, 252, 0.7);
+    --glass-border: rgba(203, 213, 225, 0.3);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
   }
 }
 
