@@ -390,17 +390,17 @@ export default function Home() {
               </div>
 
               <div className="mt-6 grid md:grid-cols-2 gap-4">
-                <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                <div className="p-3 bg-purple-50 dark:bg-purple-900/90 rounded-lg">
                   <div className="text-sm font-medium text-purple-800 dark:text-purple-200">Tipo di Frase</div>
                   <div className="text-purple-900 dark:text-purple-100 font-semibold capitalize">{result.sentenceType}</div>
                 </div>
-                <div className="p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                <div className="p-3 bg-orange-50 dark:bg-orange-900/90 rounded-lg">
                   <div className="text-sm font-medium text-orange-800 dark:text-orange-200">Affidabilità Analisi</div>
                   <div className="text-orange-900 dark:text-orange-100 font-semibold">{(result.confidence * 100).toFixed(1)}%</div>
                 </div>
               </div>
 
-              <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border-l-4 border-yellow-400">
+              <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/90 rounded-lg border-l-4 border-yellow-400">
                 <p className="text-sm text-yellow-800 dark:text-yellow-200">
                   <strong>Nota:</strong> Poiché viene elaborata automaticamente, lo strumento di analisi logica online è soggetto a errori.
                   Questa analisi è fornita a scopo educativo e potrebbe non essere accurata al 100%.
