@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
     const prompt = `
     Esegui un'analisi logica dettagliata di questa frase italiana: "${text}"
@@ -110,6 +110,8 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Analysis API error:', error);
+    console.error('Error message:', error instanceof Error ? error.message : 'Unknown error');
+    console.error('Error stack:', error instanceof Error ? error.stack : 'No stack trace');
 
     const fallbackAnalysis = {
       sentence: 'Unable to analyze',
