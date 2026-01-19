@@ -38,12 +38,11 @@ function logic_analyzer_embed_responsive_shortcode()
                     return;
                 }
                 
-                const newHeight = event.data.height;
-                if (typeof newHeight === "number") {
-                    if (Math.abs(newHeight - currentHeight) > 10) {
-                        iframe.style.height = newHeight + "px";
-                        currentHeight = newHeight;
-                    }
+                const newHeight = event.data?.height;
+                console.log('newHeight', newHeight, currentHeight, Math.abs(newHeight - currentHeight) > 10);
+                if (typeof newHeight === "number" && Math.abs(newHeight - currentHeight) > 10) {
+                    iframe.style.height = newHeight + "px";
+                    currentHeight = newHeight;
                 }
             }, false);
 
