@@ -13,7 +13,8 @@ if (!defined('ABSPATH')) {
 
 function logic_analyzer_embed_responsive_shortcode()
 {
-    $iframe_url = 'https://logic-analyzer.vercel.app/';
+    // Configuration
+    $app_url = 'https://logical-analyzer.vercel.app'; // Updated URL based on deployment
     $iframe_id = 'logic-analyzer-iframe-' . uniqid();
 
     ob_start();
@@ -21,7 +22,7 @@ function logic_analyzer_embed_responsive_shortcode()
     <div style="width: 100%; max-width: 1000px; margin: 20px auto;">
         <iframe
             id="<?php echo esc_attr($iframe_id); ?>"
-            src="<?php echo esc_url($iframe_url); ?>"
+            src="<?php echo esc_url($app_url); ?>/"
             style="width: 100%; border: none; height: 600px; display: block; overflow: hidden; transition: height 0.3s ease-in-out;"
             scrolling="no"
             title="Italian Logical Analysis Tool"
@@ -31,6 +32,7 @@ function logic_analyzer_embed_responsive_shortcode()
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const iframe = document.getElementById('<?php echo esc_js($iframe_id); ?>');
+            const appUrl = '<?php echo esc_js($app_url); ?>';
             let currentHeight = 600;
 
             function debounce(func, wait) {
@@ -45,7 +47,7 @@ function logic_analyzer_embed_responsive_shortcode()
                 if (iframe && iframe.contentWindow) {
                     iframe.contentWindow.postMessage({
                         type: 'send-height'
-                    }, 'https://logic-analyzer.vercel.app');
+                    }, appUrl);
                 }
             }, 1500);
 
@@ -53,7 +55,8 @@ function logic_analyzer_embed_responsive_shortcode()
 
             window.addEventListener("message", function(event) {
                 console.log('event', event);
-                if (event.origin !== "https://logic-analyzer.vercel.app") {
+                // Check against appUrl (origin matches)
+                if (event.origin !== appUrl.replace(/\/$/, "")) {
                     return;
                 }
                 
@@ -84,7 +87,7 @@ function logic_analyzer_embed_responsive_shortcode()
                     type: 'wp-theme',
                     colors: colors,
                     isDark: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-                }, 'https://logic-analyzer.vercel.app');
+                }, appUrl);
             }, 500);
         });
     </script>
