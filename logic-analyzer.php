@@ -38,11 +38,10 @@ function logic_analyzer_embed_responsive_shortcode()
                     return;
                 }
                 
-                console.log('event.data', event.data);
-                if (event.data && typeof event.data.height === "number") {
-                    const newHeight = event.data.height;
+                const newHeight = event.data.height;
+                if (typeof newHeight === "number") {
                     if (Math.abs(newHeight - currentHeight) > 10) {
-                        // iframe.style.height = newHeight + "px";
+                        iframe.style.height = newHeight + "px";
                         currentHeight = newHeight;
                     }
                 }

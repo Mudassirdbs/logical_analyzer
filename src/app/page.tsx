@@ -240,7 +240,7 @@ export default function Home() {
           <div className="rounded-lg shadow-lg p-6 mb-6 border border-black-500" style={cardStyle}>
             <div className="mb-4">
               <div className="flex items-center justify-between mb-2">
-                <label htmlFor="sentence-input" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label htmlFor="sentence-input" className="block text-sm font-medium text-black dark:text-gray-300">
                   Quale frase devo analizzare?
                 </label>
                 <div className="flex items-center gap-2">
