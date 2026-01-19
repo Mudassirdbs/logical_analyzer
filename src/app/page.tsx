@@ -63,6 +63,35 @@ export default function Home() {
   const [interimText, setInterimText] = useState("");
   const [theme, setTheme] = useState<ThemeColors | null>(null);
 
+  const lastHeightRef = useRef<number>(0);
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  function sendHeightToParent() {
+    if (typeof window === "undefined") return;
+    if (window.parent && window.parent !== window) {
+      const container = document.getElementById('logic-analyzer-container');
+      if (container) {
+        let height = container.scrollHeight;
+        height = Math.max(height, 600);
+        if (Math.abs(height - lastHeightRef.current) > 20) {
+          if (height > 0) {
+            console.log(`Sending height ${height} to parent`);
+            window.parent.postMessage({ height }, '*');
+          }
+          lastHeightRef.current = height;
+        }
+      }
+    }
+  };
+  function debouncedSendHeight() {
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+    debounceTimeoutRef.current = setTimeout(() => {
+      sendHeightToParent();
+    }, 300);
+  }
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const hasSpeech = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -73,7 +102,6 @@ export default function Home() {
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (event.data && event.data.type === 'wp-theme' && event.data.colors) {
-        console.log('event.data.colors', event.data.colors);
         setTheme(event.data.colors);
 
         const root = document.documentElement;
@@ -94,47 +122,27 @@ export default function Home() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    let lastHeight = 0;
-    let throttleTimeout: NodeJS.Timeout | null = null;
-
-    const sendHeightToParent = () => {
-      if (window.parent && window.parent !== window) {
-        const container = document.getElementById('logic-analyzer-container');
-        if (container) {
-          let height = container.scrollHeight;
-          height = Math.max(height, 600);
-
-          if (Math.abs(height - lastHeight) > 20) {
-            console.log('result', result, height, height > 0);
-            if (height > 0) {
-              window.parent.postMessage({ height }, '*');
-            }
-            lastHeight = height;
-          }
-        }
-      }
-    };
-
-    const throttledSendHeight = () => {
-      if (throttleTimeout) {
-        clearTimeout(throttleTimeout);
-      }
-      throttleTimeout = setTimeout(sendHeightToParent, 300);
-    };
-
+    // Height on mount/resize/result change
     sendHeightToParent();
 
-    const observer = new ResizeObserver(throttledSendHeight);
+    const observer = new ResizeObserver(debouncedSendHeight);
     const targetElement = document.body;
     if (targetElement) {
       observer.observe(targetElement);
     }
 
+    // Add scroll event listener, debounced
+    function onScroll() {
+      debouncedSendHeight();
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
     return () => {
       observer.disconnect();
-      if (throttleTimeout) {
-        clearTimeout(throttleTimeout);
+      if (debounceTimeoutRef.current) {
+        clearTimeout(debounceTimeoutRef.current);
       }
+      window.removeEventListener('scroll', onScroll);
     };
   }, [result]);
 
