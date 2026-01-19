@@ -305,7 +305,7 @@ export default function Home() {
               style={!inputText.trim() || isAnalyzing
                 ? {}
                 : theme
-                  ? { backgroundColor: 'var(--wp-button-color)', color: '#ffffff' }
+                  ? { backgroundColor: 'rgb(37, 99, 235)', color: '#ffffff' }
                   : { backgroundColor: theme ? 'var(--wp-button-color)' : '#2563eb', color: '#ffffff' }
               }
             >
