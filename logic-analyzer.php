@@ -37,11 +37,12 @@ function logic_analyzer_embed_responsive_shortcode()
                 if (event.origin !== "https://logic-analyzer.vercel.app") {
                     return;
                 }
-
+                
+                console.log('event.data', event.data);
                 if (event.data && typeof event.data.height === "number") {
                     const newHeight = event.data.height;
                     if (Math.abs(newHeight - currentHeight) > 10) {
-                        iframe.style.height = newHeight + "px";
+                        // iframe.style.height = newHeight + "px";
                         currentHeight = newHeight;
                     }
                 }

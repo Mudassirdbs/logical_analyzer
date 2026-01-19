@@ -56,7 +56,6 @@ export default function Home() {
   const [inputText, setInputText] = useState("");
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [showReference, setShowReference] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [speechSupported, setSpeechSupported] = useState(false);
   const [isListening, setIsListening] = useState(false);
@@ -100,13 +99,16 @@ export default function Home() {
 
     const sendHeightToParent = () => {
       if (window.parent && window.parent !== window) {
-        const height = document.documentElement.scrollHeight;
-        if (Math.abs(height - lastHeight) > 20) {
-          console.log('result', result, height);
-          if (result && height > 0) {
-            window.parent.postMessage({ height }, '*');
+        const container = document.getElementById('logic-analyzer-container');
+        if (container) {
+          const height = container.scrollHeight;
+          if (Math.abs(height - lastHeight) > 20) {
+            console.log('result', result, height);
+            if (result && height > 0) {
+              window.parent.postMessage({ height }, '*');
+            }
+            lastHeight = height;
           }
-          lastHeight = height;
         }
       }
     };
@@ -132,7 +134,7 @@ export default function Home() {
         clearTimeout(throttleTimeout);
       }
     };
-  }, [result, showReference]);
+  }, [result]);
 
   const composeLive = (base: string, interim: string) => {
     const spaced = base && !base.endsWith(" ") ? base + " " : base;
@@ -230,7 +232,7 @@ export default function Home() {
   } : {};
 
   return (
-    <div style={bodyStyle}>
+    <div style={bodyStyle} id="logic-analyzer-container">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto">
           <div className="rounded-lg shadow-lg p-6 mb-6 border border-black-500" style={cardStyle}>
