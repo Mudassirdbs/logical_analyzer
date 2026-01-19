@@ -33,6 +33,24 @@ function logic_analyzer_embed_responsive_shortcode()
             const iframe = document.getElementById('<?php echo esc_js($iframe_id); ?>');
             let currentHeight = 600;
 
+            function debounce(func, wait) {
+                let timeout;
+                return function(...args) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(this, args), wait);
+                }
+            }
+
+            const sendHeight = debounce(function() {
+                if (iframe && iframe.contentWindow) {
+                    iframe.contentWindow.postMessage({
+                        type: 'send-height'
+                    }, 'https://logic-analyzer.vercel.app');
+                }
+            }, 1500);
+
+            window.addEventListener('scroll', sendHeight, { passive: true });
+
             window.addEventListener("message", function(event) {
                 console.log('event', event);
                 if (event.origin !== "https://logic-analyzer.vercel.app") {

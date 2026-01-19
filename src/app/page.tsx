@@ -112,6 +112,8 @@ export default function Home() {
         if (event.data.colors.buttonColor) {
           root.style.setProperty('--wp-button-color', event.data.colors.buttonColor);
         }
+      } else if (event.data && event.data.type === 'send-height') {
+        sendHeightToParent();
       }
     };
 
