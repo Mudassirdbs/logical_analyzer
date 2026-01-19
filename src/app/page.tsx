@@ -101,7 +101,9 @@ export default function Home() {
       if (window.parent && window.parent !== window) {
         const container = document.getElementById('logic-analyzer-container');
         if (container) {
-          const height = container.scrollHeight;
+          let height = container.scrollHeight;
+          height = Math.max(height, 600);
+
           if (Math.abs(height - lastHeight) > 20) {
             console.log('result', result, height);
             if (result && height > 0) {
