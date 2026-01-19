@@ -106,7 +106,7 @@ export default function Home() {
 
           if (Math.abs(height - lastHeight) > 20) {
             console.log('result', result, height);
-            if (result && height > 0) {
+            if (height > 0) {
               window.parent.postMessage({ height }, '*');
             }
             lastHeight = height;
