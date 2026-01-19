@@ -264,7 +264,7 @@ export default function Home() {
                       }
                       : speechSupported
                         ? {
-                          background: 'var(--gradient-primary)',
+                          background: 'linear-gradient(135deg, #6366f1 0%, #3b82f6 100%)',
                           color: '#ffffff',
                           boxShadow: '0 4px 12px rgba(99, 102, 241, 0.3)'
                         }
@@ -301,10 +301,10 @@ export default function Home() {
                   maxLength={500}
                   className="w-full h-32 px-4 py-3 rounded-xl resize-none transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2"
                   style={{
-                    background: 'var(--glass-bg)',
+                    background: 'rgba(255, 255, 255, 0.5)',
                     backdropFilter: 'blur(8px)',
-                    border: '2px solid var(--glass-border)',
-                    color: theme ? 'var(--wp-text-color)' : 'inherit',
+                    border: '2px solid rgba(147, 197, 253, 0.3)',
+                    color: '#1f2937',
                     boxShadow: '0 4px 16px rgba(0, 0, 0, 0.05)',
                   }}
                 />
@@ -344,7 +344,7 @@ export default function Home() {
                   cursor: 'not-allowed'
                 }
                 : {
-                  background: 'var(--gradient-primary)',
+                  background: 'linear-gradient(135deg, #6366f1 0%, #3b82f6 100%)',
                   boxShadow: '0 8px 24px rgba(99, 102, 241, 0.4)',
                   transform: 'translateY(0)',
                 }
@@ -412,10 +412,11 @@ export default function Home() {
                     }}
                     className="px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 hover-lift"
                     style={{
-                      background: 'var(--glass-bg)',
+                      background: 'rgba(255, 255, 255, 0.5)',
                       backdropFilter: 'blur(8px)',
-                      border: '1px solid var(--glass-border)',
-                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)'
+                      border: '1px solid rgba(147, 197, 253, 0.3)',
+                      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
+                      color: '#1f2937'
                     }}
                   >
                     {sentence}
