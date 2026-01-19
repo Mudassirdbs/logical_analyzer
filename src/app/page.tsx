@@ -95,7 +95,7 @@ export default function Home() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    let lastHeight = 0;
+    const lastHeight = 0;
     let throttleTimeout: NodeJS.Timeout | null = null;
 
     const sendHeightToParent = () => {
