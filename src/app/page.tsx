@@ -95,7 +95,7 @@ export default function Home() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    const lastHeight = 0;
+    let lastHeight = 0;
     let throttleTimeout: NodeJS.Timeout | null = null;
 
     const sendHeightToParent = () => {
@@ -103,11 +103,10 @@ export default function Home() {
         const height = document.documentElement.scrollHeight;
         if (Math.abs(height - lastHeight) > 20) {
           console.log('result', result, height);
-          if (result) {
-            // window.parent.postMessage({ height }, '*');
+          if (result && height > 0) {
+            window.parent.postMessage({ height }, '*');
           }
-          // window.parent.postMessage({ height }, '*');
-          // lastHeight = height;
+          lastHeight = height;
         }
       }
     };
